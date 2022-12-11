@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FinTrackApi.Data.Migrations
 {
     [DbContext(typeof(FinTrackApiDbContext))]
-    [Migration("20221211085345_Init")]
+    [Migration("20221211135650_Init")]
     partial class Init
     {
         /// <inheritdoc />
