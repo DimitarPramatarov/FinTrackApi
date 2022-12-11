@@ -6,6 +6,10 @@ namespace FinTrackApi
     using FinTrackApi.Data.Models;
     using FinTrackApi.Data.Seeding;
     using FinTrackApi.Infrastructure;
+<<<<<<< HEAD
+=======
+    using FinTrackApi.Infrastructure.Extensions;
+>>>>>>> origin/main
     using FinTrackApi.Infrastructure.Services;
     using FinTrackApi.Services;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -14,7 +18,10 @@ namespace FinTrackApi
     using Microsoft.Extensions.Configuration;
     using Microsoft.IdentityModel.Tokens;
     using Microsoft.OpenApi.Models;
+<<<<<<< HEAD
     using System.Net.NetworkInformation;
+=======
+>>>>>>> origin/main
     using System.Text;
 
     public class Program
@@ -22,6 +29,7 @@ namespace FinTrackApi
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+<<<<<<< HEAD
 
             
         // Add services to the container.
@@ -85,6 +93,10 @@ namespace FinTrackApi
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebApi", Version = "v1" });
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
+=======
+           
+            builder.Services.RegisterServices(builder.Configuration);
+>>>>>>> origin/main
 
                     Type = SecuritySchemeType.Http,
                     BearerFormat = "JWT",
