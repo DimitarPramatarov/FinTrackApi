@@ -73,7 +73,9 @@ namespace FinTrackApi.Infrastructure.Extensions
             var applicationSettingsConfiguration = configuration.GetSection("ApplicationSettings");
             services.Configure<AppSettings>(applicationSettingsConfiguration);
 
-            return applicationSettingsConfiguration.Get<AppSettings>();
+            var appSettings = applicationSettingsConfiguration.Get<AppSettings>();
+
+            return appSettings;
         }
 
         public static IServiceCollection AddJwtTokenAtuhentication(this IServiceCollection services, AppSettings settings)

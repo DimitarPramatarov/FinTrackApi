@@ -13,6 +13,8 @@ namespace FinTrackApi
            
             var app = builder.Build();
 
+           
+
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
@@ -24,7 +26,11 @@ namespace FinTrackApi
 
             app.UseAuthorization();
 
+
             app.MapControllers();
+
+            app.RoleSeeder();
+            app.ApplyMigrations();
 
             app.Run();
         }
