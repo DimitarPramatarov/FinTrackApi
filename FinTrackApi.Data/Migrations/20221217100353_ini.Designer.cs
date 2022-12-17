@@ -12,18 +12,54 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FinTrackApi.Data.Migrations
 {
     [DbContext(typeof(FinTrackApiDbContext))]
-    [Migration("20221211135650_Init")]
-    partial class Init
+    [Migration("20221217100353_ini")]
+    partial class ini
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.0")
+                .HasAnnotation("ProductVersion", "7.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("FinTrackApi.Data.Models.TransactionAccount", b =>
+                {
+                    b.Property<string>("TransactionAccountId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TransactionAccName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TransactionAccType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("TransactionAccountId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("TransactionAccounts");
+                });
 
             modelBuilder.Entity("FinTrackApi.Data.Models.User", b =>
                 {
@@ -35,10 +71,6 @@ namespace FinTrackApi.Data.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedOn")
@@ -59,10 +91,6 @@ namespace FinTrackApi.Data.Migrations
 
                     b.Property<DateTime?>("ModifedOn")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("ModifiedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
@@ -237,6 +265,17 @@ namespace FinTrackApi.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("FinTrackApi.Data.Models.TransactionAccount", b =>
+                {
+                    b.HasOne("FinTrackApi.Data.Models.User", "User")
+                        .WithMany("TransactionAccounts")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -286,6 +325,11 @@ namespace FinTrackApi.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("FinTrackApi.Data.Models.User", b =>
+                {
+                    b.Navigation("TransactionAccounts");
                 });
 #pragma warning restore 612, 618
         }

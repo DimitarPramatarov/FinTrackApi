@@ -26,7 +26,6 @@ namespace FinTrackApi
 
             app.UseAuthorization();
 
-
             app.MapControllers();
 
             app.RoleSeeder();

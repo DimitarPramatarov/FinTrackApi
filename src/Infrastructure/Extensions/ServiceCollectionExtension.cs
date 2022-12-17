@@ -6,6 +6,7 @@ using FinTrackApi.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Runtime.CompilerServices;
@@ -42,9 +43,10 @@ namespace FinTrackApi.Infrastructure.Extensions
         public static IServiceCollection AppServices(this IServiceCollection services)
         {
 
-            services.AddScoped<ISeeder, RoleSeeder>();
-            services.AddScoped<IIdentityService, IdentityService>();
-            services.AddScoped<ICurrentUserService, CurrentUserService>();
+            services.AddTransient<ISeeder, RoleSeeder>();
+            services.AddTransient<IIdentityService, IdentityService>();
+            services.AddTransient<ICurrentUserService, CurrentUserService>();
+            services.AddTransient<ITransactionAccountService, TransactionAccountService>();
 
             return services;
 

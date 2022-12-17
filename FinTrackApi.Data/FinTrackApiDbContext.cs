@@ -16,6 +16,9 @@ namespace FinTrackApi.Data
             this.currentUserService = currentUserService;
         }
 
+        public DbSet<TransactionAccount> TransactionAccounts { get; init; }
+
+
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
             this.ApplyAuditInformation();
@@ -23,9 +26,23 @@ namespace FinTrackApi.Data
             return base.SaveChanges(acceptAllChangesOnSuccess);
         }
 
+        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken())
+        {
+            this.ApplyAuditInformation();
+
+            return base.SaveChangesAsync(acceptAllChangesOnSuccess,cancellationToken);
+        }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            builder.Entity<User>()
+             .HasMany(x => x.TransactionAccounts)
+            .WithOne(x => x.User)
+            .HasForeignKey(x => x.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
+
         }
         private void ApplyAuditInformation()
         {
@@ -36,31 +53,29 @@ namespace FinTrackApi.Data
                 {
                     var username = this.currentUserService.GetUserName();
 
-                    //if (entry.Entity is IDeletableEntity deletableEntity)
-                    //{
-                    //    if (entry.State == EntityState.Deleted)
-                    //    {
-                    //        deletableEntity.DeletedOn = DateTime.UtcNow;
-                    //        deletableEntity.DeletedBy = username;
-                    //        deletableEntity.IsDeleted = true;
+                    if (entry.Entity is DeletableEntity deletableEntity)
+                    {
+                        if (entry.State == EntityState.Deleted)
+                        {
+                            deletableEntity.DeletedOn = DateTime.UtcNow;
+                            deletableEntity.IsDeleted = true;
 
-                    //        entry.State = EntityState.Modified;
+                            entry.State = EntityState.Modified;
 
-                    //        return;
-                    //    }
-                    //}
+                            return;
+                        }
+                    }
 
                     if (entry.Entity is IEntity entity)
                     {
                         if (entry.State == EntityState.Added)
                         {
                             entity.CreatedOn = DateTime.UtcNow;
-                            entity.CreatedBy = username;
                         }
+
                         else if (entry.State == EntityState.Modified)
                         {
                             entity.ModifedOn = DateTime.UtcNow;
-                            entity.ModifiedBy = username;
                         }
                     }
                 });

@@ -1,14 +1,16 @@
-﻿using FinTrackApi.Data.Models.Base;
-using Microsoft.AspNetCore.Identity;
-
-namespace FinTrackApi.Data.Models
+﻿namespace FinTrackApi.Data.Models
 {
+    using FinTrackApi.Data.Models.Base;
+    using Microsoft.AspNetCore.Identity;
+    using System.ComponentModel.DataAnnotations.Schema;
+
     public class User : IdentityUser, IEntity
     {
         public DateTime CreatedOn { get; set; } = DateTime.UtcNow;
-        public string CreatedBy { get; set; } = "User";
+
         public DateTime? ModifedOn { get; set; } = DateTime.UtcNow;
-        public string ModifiedBy { get; set; } = "User";
+
+        public virtual ICollection<TransactionAccount> TransactionAccounts { get; set; } = new HashSet<TransactionAccount>();
     }
 }
 

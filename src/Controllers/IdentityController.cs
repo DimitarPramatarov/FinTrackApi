@@ -19,19 +19,31 @@ namespace FinTrackApi.Controllers
         [HttpPost]
         [AllowAnonymous]
         [Route("Register")]
-        public async Task<bool> Regiter(RegisterModel registerRequestModel)
+        public async Task<ActionResult> Regiter(RegisterModel registerRequestModel)
         {
             var register = await identityService.Register(registerRequestModel);
-            return register;
+
+            if(register == false)
+            {
+                return Unauthorized(registerRequestModel);
+            }
+
+            return Ok(register);
         }
 
         [HttpPost]
         [AllowAnonymous]
         [Route("Login")]
-        public async Task<LoginResponseModel> Login(LoginModel model)
+        public async Task<ActionResult<LoginResponseModel>> Login(LoginModel model)
         {
             var login = await identityService.Login(model);
-            return login;
+
+            if(!string.IsNullOrEmpty(login.JwtToken))
+            {
+                return Ok(login);
+            }
+
+            return Unauthorized(login);
         }
     }
 }
