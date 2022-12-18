@@ -1,5 +1,4 @@
-﻿
-namespace FinTrackApi.Controllers
+﻿namespace FinTrackApi.Controllers
 {
     using FinTrackApi.Models.RequestModels;
     using FinTrackApi.Models.ResponseModels;

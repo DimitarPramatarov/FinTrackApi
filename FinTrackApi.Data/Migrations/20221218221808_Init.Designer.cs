@@ -4,6 +4,7 @@ using FinTrackApi.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FinTrackApi.Data.Migrations
 {
     [DbContext(typeof(FinTrackApiDbContext))]
-    partial class FinTrackApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221218221808_Init")]
+    partial class Init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -47,9 +50,6 @@ namespace FinTrackApi.Data.Migrations
 
                     b.Property<string>("TransactionAccountId")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("TransactionId")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("BalanceId");
 

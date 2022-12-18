@@ -1,15 +1,15 @@
 ﻿using FinTrackApi.Data;
 using FinTrackApi.Data.Models;
+using FinTrackApi.Data.Models.Interfaces;
 using FinTrackApi.Data.Seeding;
 using FinTrackApi.Infrastructure.Services;
 using FinTrackApi.Services;
+using FinTrackApi.Services.BalanceService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace FinTrackApi.Infrastructure.Extensions
@@ -47,6 +47,7 @@ namespace FinTrackApi.Infrastructure.Extensions
             services.AddTransient<IIdentityService, IdentityService>();
             services.AddTransient<ICurrentUserService, CurrentUserService>();
             services.AddTransient<ITransactionAccountService, TransactionAccountService>();
+            services.AddTransient<IBalanceService, BalanceService>();
 
             return services;
 

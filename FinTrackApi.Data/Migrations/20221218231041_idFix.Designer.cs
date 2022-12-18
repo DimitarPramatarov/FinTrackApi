@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FinTrackApi.Data.Migrations
 {
     [DbContext(typeof(FinTrackApiDbContext))]
-    [Migration("20221217100353_ini")]
-    partial class ini
+    [Migration("20221218231041_idFix")]
+    partial class idFix
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,42 @@ namespace FinTrackApi.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("FinTrackApi.Data.Models.Balance", b =>
+                {
+                    b.Property<string>("BalanceId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("PreviousBalance")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<decimal>("TotalBalance")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<string>("TransactionAccountId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("TransactionId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("BalanceId");
+
+                    b.HasIndex("TransactionAccountId");
+
+                    b.ToTable("Balances");
+                });
 
             modelBuilder.Entity("FinTrackApi.Data.Models.TransactionAccount", b =>
                 {
@@ -51,7 +87,6 @@ namespace FinTrackApi.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("TransactionAccountId");
@@ -265,13 +300,21 @@ namespace FinTrackApi.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("FinTrackApi.Data.Models.Balance", b =>
+                {
+                    b.HasOne("FinTrackApi.Data.Models.TransactionAccount", "TransactionAccount")
+                        .WithMany()
+                        .HasForeignKey("TransactionAccountId");
+
+                    b.Navigation("TransactionAccount");
+                });
+
             modelBuilder.Entity("FinTrackApi.Data.Models.TransactionAccount", b =>
                 {
                     b.HasOne("FinTrackApi.Data.Models.User", "User")
                         .WithMany("TransactionAccounts")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("User");
                 });

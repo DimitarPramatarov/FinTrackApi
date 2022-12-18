@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace FinTrackApi.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class ini : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -165,7 +165,7 @@ namespace FinTrackApi.Data.Migrations
                     TransactionAccountId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     TransactionAccName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TransactionAccType = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
@@ -180,6 +180,29 @@ namespace FinTrackApi.Data.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Balances",
+                columns: table => new
+                {
+                    BalanceId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    TotalBalance = table.Column<decimal>(type: "decimal(18,4)", nullable: false),
+                    PreviousBalance = table.Column<decimal>(type: "decimal(18,4)", nullable: false),
+                    TransactionAccountId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Balances", x => x.BalanceId);
+                    table.ForeignKey(
+                        name: "FK_Balances_TransactionAccounts_TransactionAccountId",
+                        column: x => x.TransactionAccountId,
+                        principalTable: "TransactionAccounts",
+                        principalColumn: "TransactionAccountId");
                 });
 
             migrationBuilder.CreateIndex(
@@ -222,6 +245,11 @@ namespace FinTrackApi.Data.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Balances_TransactionAccountId",
+                table: "Balances",
+                column: "TransactionAccountId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_TransactionAccounts_UserId",
                 table: "TransactionAccounts",
                 column: "UserId");
@@ -246,10 +274,13 @@ namespace FinTrackApi.Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "TransactionAccounts");
+                name: "Balances");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "TransactionAccounts");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
