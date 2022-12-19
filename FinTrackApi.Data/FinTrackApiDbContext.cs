@@ -2,9 +2,8 @@
 using FinTrackApi.Data.Models.Base;
 using FinTrackApi.Infrastructure.Services;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Emit;
-using System.Security.Cryptography.X509Certificates;
 
 namespace FinTrackApi.Data
 {
@@ -21,6 +20,8 @@ namespace FinTrackApi.Data
         public virtual DbSet<TransactionAccount> TransactionAccounts { get; set; }
 
         public virtual DbSet<Balance> Balances { get; set; }
+
+        public virtual DbSet<MoneyTransaction> MoneyTransactions { get; set; }
 
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
@@ -54,6 +55,12 @@ namespace FinTrackApi.Data
             builder.Entity<Balance>()
                 .Property(p => p.PreviousBalance)
                 .HasColumnType("decimal(18,4)");
+
+            builder.Entity<Balance>()
+                .HasMany(x => x.Transactions)
+                .WithOne(i => i.Balance)
+                .HasForeignKey(x => x.BalanceId)
+                .OnDelete(DeleteBehavior.Restrict);
             
         }
         private void ApplyAuditInformation()

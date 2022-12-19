@@ -19,5 +19,7 @@
         public virtual TransactionAccount? TransactionAccount { get; set; }
 
         public string? TransactionAccountId { get; set; }
+
+        public ICollection<MoneyTransaction> Transactions { get; set; } = new HashSet<MoneyTransaction>();
     }
 }

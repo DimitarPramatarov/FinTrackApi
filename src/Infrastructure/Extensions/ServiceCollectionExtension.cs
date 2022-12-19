@@ -1,19 +1,19 @@
-﻿using FinTrackApi.Data;
-using FinTrackApi.Data.Models;
-using FinTrackApi.Data.Models.Interfaces;
-using FinTrackApi.Data.Seeding;
-using FinTrackApi.Infrastructure.Services;
-using FinTrackApi.Services;
-using FinTrackApi.Services.BalanceService;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
-using System.Text;
-
-namespace FinTrackApi.Infrastructure.Extensions
+﻿namespace FinTrackApi.Infrastructure.Extensions
 {
+    using FinTrackApi.Data;
+    using FinTrackApi.Data.Models;
+    using FinTrackApi.Data.Seeding;
+    using FinTrackApi.Infrastructure.Services;
+    using FinTrackApi.Services;
+    using FinTrackApi.Services.BalanceService;
+    using FinTrackApi.Services.Transaction;
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.IdentityModel.Tokens;
+    using Microsoft.OpenApi.Models;
+    using System.Text;
+
     public static class ServiceCollectionExtension
     {
 
@@ -49,6 +49,7 @@ namespace FinTrackApi.Infrastructure.Extensions
             services.AddTransient<ICurrentUserService, CurrentUserService>();
             services.AddTransient<ITransactionAccountService, TransactionAccountService>();
             services.AddTransient<IBalanceService, BalanceService>();
+            services.AddTransient<ITransactionService, TransactionService>();
 
             return services;
 

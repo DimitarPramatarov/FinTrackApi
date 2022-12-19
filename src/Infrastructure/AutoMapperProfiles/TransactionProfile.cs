@@ -2,13 +2,13 @@
 {
     using AutoMapper;
     using FinTrackApi.Data.Models;
-    using FinTrackApi.Models.RequestModels.TransactionAccModels;
+    using FinTrackApi.Models.RequestModels.MoneyTransactionModels;
 
     public class TransactionProfile : Profile
     {
-        public TransactionProfile()
+        public TransactionProfile() 
         {
-            CreateMap<TransactionAccRequestModel, TransactionAccount>();
+            CreateMap<MoneyTransactionRequestModel, MoneyTransaction>();
         }
     }
 }
