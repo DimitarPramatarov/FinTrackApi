@@ -6,10 +6,10 @@ namespace FinTrackApi.Models.RequestModels.TransactionAccModels
     {
         [MinLength(3)]
         [MaxLength(20)]
-        public string AccountName { get; set; } = string.Empty;
+        public string TransactionAccName { get; set; } = string.Empty;
 
         [MinLength(3)]
         [MaxLength(20)]
-        public string AccountType { get; set; } = string.Empty;
+        public string TransactionAccType { get; set; } = string.Empty;
     }
 }

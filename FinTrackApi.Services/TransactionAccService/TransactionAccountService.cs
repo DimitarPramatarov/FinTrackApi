@@ -9,19 +9,22 @@
     using Microsoft.EntityFrameworkCore;
     using FinTrackApi.Models.ResponseModels.TransactionAccResposeModels;
     using FinTrackApi.Services.BalanceService;
+    using AutoMapper;
 
     public class TransactionAccountService : ITransactionAccountService
     {
         private readonly FinTrackApiDbContext dbContext;
         private readonly ICurrentUserService currentUserService;
         private readonly IBalanceService balanceService;
+        private readonly IMapper mapper;
 
         public TransactionAccountService(FinTrackApiDbContext dbContext, ICurrentUserService currentUserService,
-            IBalanceService balanceService)
+            IBalanceService balanceService, IMapper mapper)
         {
             this.dbContext = dbContext;
             this.currentUserService = currentUserService;
             this.balanceService = balanceService;
+            this.mapper = mapper;
         }
 
         public async Task<bool> CreateAccount(TransactionAccRequestModel requestModel)
@@ -30,13 +33,8 @@
 
             if(requestModel != null)
             {
-
-                TransactionAccount transactionAcc = new()
-                {
-                    UserId = userId,
-                    TransactionAccName = requestModel.AccountName,
-                    TransactionAccType = requestModel.AccountType
-                };
+                var transactionAcc = this.mapper.Map<TransactionAccount>(requestModel);
+                transactionAcc.UserId = userId;
 
                 await this.dbContext.TransactionAccounts.AddAsync(transactionAcc);
                 await this.dbContext.SaveChangesAsync();

@@ -10,7 +10,7 @@
     public class BalanceService : IBalanceService
     {
         private readonly FinTrackApiDbContext dbContext;
-        private  IMapper mapper;
+        private  readonly IMapper mapper;
 
         public BalanceService(FinTrackApiDbContext dbContext,
             IMapper mapper)
