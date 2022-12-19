@@ -38,9 +38,6 @@
                     TransactionAccType = requestModel.AccountType
                 };
 
-
-
-
                 await this.dbContext.TransactionAccounts.AddAsync(transactionAcc);
                 await this.dbContext.SaveChangesAsync();
                 await this.balanceService.InitBalance(transactionAcc.TransactionAccountId);

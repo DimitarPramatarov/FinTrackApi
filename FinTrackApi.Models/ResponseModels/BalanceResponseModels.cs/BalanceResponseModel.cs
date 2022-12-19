@@ -6,6 +6,6 @@
         
         public required string TotalBalance { get; set; }
 
-        public required string PreviosBalance { get; set; }
+        public required string PreviousBalance { get; set; }
     }
 }

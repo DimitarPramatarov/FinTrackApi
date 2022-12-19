@@ -24,6 +24,7 @@ namespace FinTrackApi.Infrastructure.Extensions
             servicesCollection.AppServices();
             servicesCollection.AddIdentity();
             servicesCollection.AddSwagger();
+            servicesCollection.AddAutoMapper(typeof(Program));
             servicesCollection.AddDatabase(configuration);
             
             var appSettings = servicesCollection.GetApplicationSettings(configuration);

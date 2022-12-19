@@ -1,5 +1,6 @@
 ﻿namespace FinTrackApi.Services.BalanceService
 {
+    using AutoMapper;
     using FinTrackApi.Data;
     using FinTrackApi.Data.Models;
     using FinTrackApi.Models.RequestModels.CommonRequestModels;
@@ -9,10 +10,13 @@
     public class BalanceService : IBalanceService
     {
         private readonly FinTrackApiDbContext dbContext;
+        private  IMapper mapper;
 
-        public BalanceService(FinTrackApiDbContext dbContext)
+        public BalanceService(FinTrackApiDbContext dbContext,
+            IMapper mapper)
         {
             this.dbContext = dbContext;
+            this.mapper = mapper;
         }
 
         public Task<bool> DeleteBalance()
@@ -33,13 +37,7 @@
 
             if(result != null)
             {
-                BalanceResponseModel balance = new()
-                { 
-                    BalanceId = result.BalanceId,
-                     CreatedOn = result.CreatedOn,
-                     TotalBalance = result.TotalBalance.ToString(),
-                     PreviosBalance = result.PreviousBalance.ToString(),
-                };
+                var balance = this.mapper.Map<BalanceResponseModel>(result);
 
                 return balance;
             }
