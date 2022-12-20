@@ -52,15 +52,13 @@
             if(model.Id != null)
             {
 
-                var isDeleted = this.dbContext.TransactionAccounts
-                    .Where(x => x.TransactionAccountId.Equals(model.Id))
-                    .Select(x => x.IsDeleted)
-                    .FirstOrDefault();
+                var account = this.dbContext.TransactionAccounts
+                    .FirstOrDefault(x => x.TransactionAccountId.Equals(model.Id) && x.IsDeleted.Equals(false));
 
-                if (isDeleted.Equals(false))
+                if (account != null)
                 {
-                
-                    isDeleted = true;
+
+                    account.IsDeleted = true;
                     await this.dbContext.SaveChangesAsync();
                 
                     return GlobalContants.Deleted;
@@ -75,7 +73,7 @@
             var currentUser =  this.currentUserService.GetId();
 
             var accounts = await this.dbContext.TransactionAccounts
-                .Where(x => x.UserId.Equals(currentUser))
+                .Where(x => x.UserId.Equals(currentUser) && x.IsDeleted.Equals(false))
                 .Select(x => x)
                 .ToListAsync();
 
@@ -86,25 +84,27 @@
 
         public async Task<string> UpdateAccount(TransactionAccUpdateModel requestModel)
         {
-            if(requestModel != null)
-            {
-                var property = await this.dbContext.TransactionAccounts
-                    .Where(x => x.TransactionAccountId.Equals(requestModel.Id))
-                    .Select(x => requestModel.Property)
-                    .FirstOrDefaultAsync();
 
-                if(property != null)
-                {
-
-                    property = requestModel.Value ?? property;
-
+            var transactionAccount = await this.dbContext.TransactionAccounts
+                .FirstOrDefaultAsync(x => x.TransactionAccountId.Equals(requestModel.TransactionAccountId));
+                    
+           if(transactionAccount != null && requestModel.Value != null)
+           {
+               var property = transactionAccount.GetType().GetProperty(requestModel.Property);
+               
+               if(property != null)
+               {
+                    
+                    property.SetValue(transactionAccount, requestModel.Value);
+                    
                     await this.dbContext.SaveChangesAsync();
-
-                    return GlobalContants.Update;
                 }
-            }
 
-           return GlobalContants.NotFound;
+
+                return GlobalContants.Update;
+           }
+
+                    return GlobalContants.NotFound;
         }
     }
 }

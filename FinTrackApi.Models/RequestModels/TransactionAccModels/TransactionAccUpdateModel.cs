@@ -2,7 +2,7 @@
 {
     public sealed class TransactionAccUpdateModel
     {
-        public required string Id { get; set; }
+        public required string TransactionAccountId { get; set; }
 
         public required string Property { get; set; }
 

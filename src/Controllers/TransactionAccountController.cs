@@ -6,6 +6,7 @@
     using FinTrackApi.Services;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore.Scaffolding;
 
     [Authorize]
     public class TransactionAccountController : ApiController    
@@ -51,9 +52,16 @@
         public async Task<string> UpdateTranactionAccount(TransactionAccUpdateModel model)
             => await this.transactionService.UpdateAccount(model);
 
-        //[HttpPost]
-        //[Route("/delete")]
-        //public async Task<string> DeleteTransactionAccount(RequestByIdModel model)
-        //    => Ok(await this.transactionService.DeleteAccount(model));
+        [HttpPost]
+        [Route("/delete")]
+        public async Task<ActionResult<string>> DeleteTransactionAccount(RequestByIdModel model)
+        {
+           if(!ModelState.IsValid)
+            {
+                return BadRequest(model?.Id.ToString());
+            }
+
+            return Ok(await this.transactionService.DeleteAccount(model));
+        }
     }
 }
