@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinTrackApi.Models", "..\Fi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinTrackApi.Infrastructure", "..\FinTrackApi.Infrastructure\FinTrackApi.Infrastructure.csproj", "{A6DBFD29-0323-482D-9E2E-2662ACB3A43A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinTrackApi.Common", "..\FinTrackApi.Common\FinTrackApi.Common.csproj", "{7252E3A8-81C1-4A33-8428-DF30AC127484}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinTrackApi.Common", "..\FinTrackApi.Common\FinTrackApi.Common.csproj", "{7252E3A8-81C1-4A33-8428-DF30AC127484}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinTrackApi.Tests", "..\FinTrackApi.Tests\FinTrackApi.Tests.csproj", "{A7047B00-601B-44AF-9D3E-8D51BFB5E5A4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{7252E3A8-81C1-4A33-8428-DF30AC127484}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7252E3A8-81C1-4A33-8428-DF30AC127484}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7252E3A8-81C1-4A33-8428-DF30AC127484}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7047B00-601B-44AF-9D3E-8D51BFB5E5A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7047B00-601B-44AF-9D3E-8D51BFB5E5A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7047B00-601B-44AF-9D3E-8D51BFB5E5A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7047B00-601B-44AF-9D3E-8D51BFB5E5A4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

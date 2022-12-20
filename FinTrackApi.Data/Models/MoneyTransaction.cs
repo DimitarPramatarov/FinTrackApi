@@ -9,6 +9,7 @@
 
     public class MoneyTransaction : DeletableEntity, IMoneyTransaction
     {
+
         [Key]
         public string MoneyTransactionId { get; set; } = Guid.NewGuid().ToString();
 

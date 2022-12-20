@@ -74,18 +74,14 @@
         {
             var currentUser =  this.currentUserService.GetId();
 
-                var accounts = await this.dbContext.TransactionAccounts
-                    .Where(x => x.UserId.Equals(currentUser))
-                    .Select(x => new MyAccountResponseModel
-                    { 
-                         CreatedOn = x.CreatedOn,
-                         MyTransactionAccId = x.TransactionAccountId,
-                         MyTransactionAccName = x.TransactionAccName,
-                         MyTransactionAccType = x.TransactionAccType
-                    })
-                    .ToListAsync<MyAccountResponseModel>();
+            var accounts = await this.dbContext.TransactionAccounts
+                .Where(x => x.UserId.Equals(currentUser))
+                .Select(x => x)
+                .ToListAsync();
 
-            return accounts;
+            var result = mapper.Map<IEnumerable<MyAccountResponseModel>>(accounts);
+
+            return result;
         }
 
         public async Task<string> UpdateAccount(TransactionAccUpdateModel requestModel)

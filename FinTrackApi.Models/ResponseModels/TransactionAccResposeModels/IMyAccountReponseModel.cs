@@ -2,10 +2,10 @@
 {
     public interface IMyAccountReponseModel
     {
-        string MyTransactionAccId { get; set; }
+        string TransactionAccountId { get; set; }
 
-        string MyTransactionAccName { get; set; }
+        string TransactionAccName { get; set; }
 
-        string MyTransactionAccType { get; set; }
+        string TransactionAccType { get; set; }
     }
 }
