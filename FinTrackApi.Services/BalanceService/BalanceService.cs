@@ -6,6 +6,7 @@
     using FinTrackApi.Models.RequestModels.CommonRequestModels;
     using FinTrackApi.Models.ResponseModels.BalanceResponseModels.cs;
     using Microsoft.EntityFrameworkCore;
+    using System.Security.Cryptography.X509Certificates;
 
     public class BalanceService : IBalanceService
     {
@@ -46,7 +47,7 @@
 
             var result = await this.dbContext
                 .Balances
-                .FirstOrDefaultAsync(x => x.TransactionAccountId.Equals(id.Id));
+                .FirstOrDefaultAsync(x => x.TransactionAccountId.Equals(id.Id) && x.IsDeleted.Equals(false));
 
             if (result != null)
             {
@@ -80,7 +81,7 @@
             if (id?.Id != null)
             {
                 var balance = await this.dbContext.Balances
-                    .FirstOrDefaultAsync(x => x.BalanceId.Equals(id.Id));
+                    .FirstOrDefaultAsync(x => x.BalanceId.Equals(id.Id) && x.IsDeleted.Equals(false));
 
                 if (balance != null)
                 {
