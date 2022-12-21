@@ -10,7 +10,7 @@
     public class BalanceService : IBalanceService
     {
         private readonly FinTrackApiDbContext dbContext;
-        private  readonly IMapper mapper;
+        private readonly IMapper mapper;
 
         public BalanceService(FinTrackApiDbContext dbContext,
             IMapper mapper)
@@ -19,14 +19,27 @@
             this.mapper = mapper;
         }
 
-        public Task<bool> DeleteBalance()
+        public async Task<bool> DeleteBalance(RequestByIdModel id)
         {
-            throw new NotImplementedException();
+            if (id.Id != null)
+            {
+
+                var balance = await this.dbContext.Balances
+                    .Where(x => x.BalanceId.Equals(id.Id))
+                    .FirstOrDefaultAsync();
+
+                balance.IsDeleted = true;
+
+                await this.dbContext.SaveChangesAsync();
+                return true;
+            }
+
+            return false;
         }
 
         public async Task<BalanceResponseModel> GetAccountBalance(RequestByIdModel id)
         {
-            if(id.Id == null)
+            if (id.Id == null)
             {
                 return null!;
             }
@@ -35,7 +48,7 @@
                 .Balances
                 .FirstOrDefaultAsync(x => x.TransactionAccountId.Equals(id.Id));
 
-            if(result != null)
+            if (result != null)
             {
                 var balance = this.mapper.Map<BalanceResponseModel>(result);
 
@@ -62,14 +75,70 @@
             return balance;
         }
 
-        public Task<bool> ResetBalance()
+        public async Task<bool> ResetBalance(RequestByIdModel id)
         {
-            throw new NotImplementedException();
+            if (id?.Id != null)
+            {
+                var balance = await this.dbContext.Balances
+                    .FirstOrDefaultAsync(x => x.BalanceId.Equals(id.Id));
+
+                if (balance != null)
+                {
+                    balance.TotalBalance = 0.00M;
+                    balance.PreviousBalance = 0.00M;
+
+                    await this.dbContext.SaveChangesAsync();
+                }
+
+                return true;
+            }
+
+            return false;
         }
 
-        public Task<bool> UpdateBalance()
+        public async Task<bool> UpdateBalance(string id)
         {
-            throw new NotImplementedException();
+            var lastTransaction = await this.dbContext.MoneyTransactions
+                .Where(x => x.BalanceId.Equals(id))
+                .OrderByDescending(x => x.CreatedOn)
+                .FirstOrDefaultAsync();
+
+            var currentBalance = await this.dbContext.Balances
+                .FirstOrDefaultAsync(x => x.BalanceId.Equals(id));
+
+            if (lastTransaction != null && currentBalance != null)
+            {
+
+                currentBalance.PreviousBalance = currentBalance.TotalBalance;
+                var newBalance = CalculateTotalBalance(currentBalance.TotalBalance, lastTransaction.MoneyTransactionValue, lastTransaction.TransactionType.ToString());
+
+                if (!newBalance.Equals(0.00M))
+                {
+                    currentBalance.PreviousBalance = currentBalance.TotalBalance;
+                    currentBalance.TotalBalance = newBalance;
+
+                    await this.dbContext.SaveChangesAsync();
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private decimal CalculateTotalBalance(decimal currentBalance, decimal transaction, string type)
+        {
+            if (type.Equals("Income"))
+            {
+                return currentBalance + transaction;
+            }
+
+            if (type.Equals("Outcome"))
+            {
+                return currentBalance - transaction;
+            }
+
+            return 0.00M;
         }
     }
 }
