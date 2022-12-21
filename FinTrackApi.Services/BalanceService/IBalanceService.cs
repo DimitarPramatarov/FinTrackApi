@@ -8,11 +8,11 @@
     {
         Task<Balance> InitBalance(string id);
 
-        Task<bool> UpdateBalance();
+        Task<bool> UpdateBalance(string id);
 
-        Task<bool> ResetBalance();
+        Task<bool> ResetBalance(RequestByIdModel id);
 
-        Task<bool> DeleteBalance();
+        Task<bool> DeleteBalance(RequestByIdModel id);
 
         Task<BalanceResponseModel> GetAccountBalance(RequestByIdModel id);
     }
