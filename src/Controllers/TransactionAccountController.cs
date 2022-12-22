@@ -19,7 +19,7 @@
         }
 
         [HttpGet]
-        [Route("/get/transaction-accounts")]
+        [Route("/transaction-accounts/my-accounts")]
         public async Task<ActionResult<IEnumerable<MyAccountResponseModel>>> GetMyTransactionAccounts()
         {
             var result = await this.transactionService.GetMyAccounts();
@@ -33,7 +33,7 @@
         }
 
         [HttpPost]
-        [Route("/create")]
+        [Route("transaction-accounts/create")]
         public async Task<ActionResult<bool>> CreateTransactionAccount(TransactionAccRequestModel model)
         {
 
@@ -48,12 +48,12 @@
         }
 
         [HttpPost]
-        [Route("/update")]
+        [Route("transaction-accounts/update")]
         public async Task<string> UpdateTranactionAccount(TransactionAccUpdateModel model)
             => await this.transactionService.UpdateAccount(model);
 
         [HttpPost]
-        [Route("/delete")]
+        [Route("transaction-accounts/delete")]
         public async Task<ActionResult<string>> DeleteTransactionAccount(RequestByIdModel model)
         {
            if(!ModelState.IsValid)

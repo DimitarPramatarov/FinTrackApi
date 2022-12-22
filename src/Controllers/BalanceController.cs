@@ -17,6 +17,7 @@
         }
 
         [HttpPost]
+        [Route("balance/get-balance")]
         public async Task<ActionResult<BalanceResponseModel>> GetAccountBalance(RequestByIdModel id)
         {
           

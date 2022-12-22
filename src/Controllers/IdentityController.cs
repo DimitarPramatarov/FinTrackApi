@@ -17,7 +17,7 @@
 
         [HttpPost]
         [AllowAnonymous]
-        [Route("Register")]
+        [Route("register")]
         public async Task<ActionResult> Regiter(RegisterModel registerRequestModel)
         {
             var register = await identityService.Register(registerRequestModel);
@@ -32,7 +32,7 @@
 
         [HttpPost]
         [AllowAnonymous]
-        [Route("Login")]
+        [Route("login")]
         public async Task<ActionResult<LoginResponseModel>> Login(LoginModel model)
         {
             var login = await identityService.Login(model);
