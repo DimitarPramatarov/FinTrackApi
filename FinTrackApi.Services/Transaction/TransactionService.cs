@@ -54,6 +54,7 @@
                 {
                     await this.dbContext.SaveChangesAsync();
                     await this.balanceService.UpdateBalance(transaction.BalanceId, transaction.MoneyTransactionId);
+                    return true;
                 }
             }
 
