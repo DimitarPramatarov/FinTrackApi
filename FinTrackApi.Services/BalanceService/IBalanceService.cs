@@ -8,7 +8,7 @@
     {
         Task<Balance> InitBalance(string id);
 
-        Task<bool> UpdateBalance(string id);
+        Task<bool> UpdateBalance(string id, string transactionId);
 
         Task<bool> ResetBalance(RequestByIdModel id);
 

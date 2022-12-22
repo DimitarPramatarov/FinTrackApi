@@ -3,6 +3,8 @@
     public enum TransactionType
     {
         Income,
-        Outcome
+        Outcome,
+        Deleted
+       
     }
 }

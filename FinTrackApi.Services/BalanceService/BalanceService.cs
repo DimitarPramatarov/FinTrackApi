@@ -6,6 +6,7 @@
     using FinTrackApi.Models.RequestModels.CommonRequestModels;
     using FinTrackApi.Models.ResponseModels.BalanceResponseModels.cs;
     using Microsoft.EntityFrameworkCore;
+    using System.Runtime.CompilerServices;
     using System.Security.Cryptography.X509Certificates;
 
     public class BalanceService : IBalanceService
@@ -97,25 +98,30 @@
             return false;
         }
 
-        public async Task<bool> UpdateBalance(string id)
+        public async Task<bool> UpdateBalance(string balanceId, string transactionId)
         {
-            var lastTransaction = await this.dbContext.MoneyTransactions
-                .Where(x => x.BalanceId.Equals(id))
-                .OrderByDescending(x => x.CreatedOn)
+            var transaction = await this.dbContext.MoneyTransactions
+                .Where(x => x.BalanceId.Equals(balanceId) && x.MoneyTransactionId.Equals(transactionId))
                 .FirstOrDefaultAsync();
 
             var currentBalance = await this.dbContext.Balances
-                .FirstOrDefaultAsync(x => x.BalanceId.Equals(id));
+                .FirstOrDefaultAsync(x => x.BalanceId.Equals(balanceId));
 
-            if (lastTransaction != null && currentBalance != null)
+            if (transaction != null && currentBalance != null)
             {
 
                 currentBalance.PreviousBalance = currentBalance.TotalBalance;
-                var newBalance = CalculateTotalBalance(currentBalance.TotalBalance, lastTransaction.MoneyTransactionValue, lastTransaction.TransactionType.ToString());
+                var newBalance = CalculateTotalBalance(currentBalance.TotalBalance, transaction.MoneyTransactionValue, transaction.TransactionType.ToString());
 
                 if (!newBalance.Equals(0.00M))
                 {
                     currentBalance.PreviousBalance = currentBalance.TotalBalance;
+
+                    if(transaction.TransactionType.ToString().Equals("Deleted"))
+                    {
+                        currentBalance.PreviousBalance = CalculatePreviousBalanceIfDeleted(currentBalance.PreviousBalance, transaction.MoneyTransactionValue);
+                    }
+
                     currentBalance.TotalBalance = newBalance;
 
                     await this.dbContext.SaveChangesAsync();
@@ -139,7 +145,17 @@
                 return currentBalance - transaction;
             }
 
+            if(type.Equals("Deleted"))
+            {
+                return currentBalance - transaction;
+            }
+
             return 0.00M;
+        }
+
+        private decimal CalculatePreviousBalanceIfDeleted(decimal previousBalance, decimal deletedTransaction)
+        {
+            return previousBalance - deletedTransaction;
         }
     }
 }

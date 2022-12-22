@@ -37,6 +37,7 @@ namespace FinTrackApi.Tests
             var optionsBuilder = new DbContextOptionsBuilder<FinTrackApiDbContext>();
             optionsBuilder.UseInMemoryDatabase("FinTrackApiDb");
             var dbContext = new FinTrackApiDbContext(optionsBuilder.Options, this.currentUserService);
+            dbContext.Database.EnsureDeleted();
             return dbContext;
         }
 
@@ -116,7 +117,7 @@ namespace FinTrackApi.Tests
             {
                 BalanceId = "1",
                 MoneyTransactionValue = 100.00M,
-                MoneyTransactionId = "1",
+                MoneyTransactionId = "2",
                 TransactionType = 0,
                  MoneyTransactionName = "Food",
             };
@@ -128,7 +129,7 @@ namespace FinTrackApi.Tests
             var service = new BalanceService(dbContext, mapper);
 
             //act
-            var result =  await service.UpdateBalance("1");
+            var result =  await service.UpdateBalance("1", "2");
 
             //assert
             result.Should().Be(true);
